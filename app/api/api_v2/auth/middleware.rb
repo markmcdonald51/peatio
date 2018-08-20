@@ -4,13 +4,20 @@
 module APIv2
   module Auth
     class Middleware < Grape::Middleware::Base
+      # def before
+      #   return unless auth_by_jwt?
+      #   env['api_v2.authentic_member_email'] = Peatio::Auth::JWTAuthenticator
+      #                                            .new(Utils.jwt_public_key)
+      #                                            .authenticate!(headers['Authorization'])
+      #                                            .yield_self { |payload| fetch_email(payload) }
+      # end
+
       def before
         return unless auth_by_jwt?
 
         env['api_v2.authentic_member_email'] = \
           JWTAuthenticator.new(headers['Authorization']).authenticate!(return: :email)
       end
-
     private
 
       def auth_by_jwt?
